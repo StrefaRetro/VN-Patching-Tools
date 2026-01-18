@@ -681,7 +681,7 @@ public static class FileTool
                                             }
                                             contents[fsInfo.Name] = packedFile.Stream;
                                             packedFile.Stream.IncRef();
-                                            packedSubFolder.Dispose();
+                                            packedFile.Dispose();
                                         }
                                     }
                                 }
@@ -696,7 +696,7 @@ public static class FileTool
                             }
                         }
                     }
-                    else if (fsInfo is FileInfo file)
+                    else if (fsInfo is System.IO.FileInfo file)
                     {
                         // It is a file. Read it and insert/overwrite.
                         bool exists = contents.TryGetValue(fsInfo.Name, out var oldStream);
@@ -790,7 +790,7 @@ public static class FileTool
                             ct);
                     }
                 }
-                else if (fsInfo is FileInfo file)
+                else if (fsInfo is System.IO.FileInfo file)
                 {
                     if (File.Exists(destPath))
                     {
