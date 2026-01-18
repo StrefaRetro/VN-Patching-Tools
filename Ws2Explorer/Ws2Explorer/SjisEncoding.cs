@@ -15,6 +15,8 @@ public static class SjisEncoding
     static SjisEncoding()
     {
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-        Encoding = Encoding.GetEncoding("shift_jis");
+        // Use Windows-1250 for Polish support as requested.
+        // Was "shift_jis"
+        Encoding = Encoding.GetEncoding(1250);
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Drawing.Text;
+using System.Drawing.Text;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -672,6 +672,7 @@ partial class MainWindow : Form
 
     private void MainForm_SizeChanged(object sender, EventArgs e)
     {
+        if (config == null) return;
         config.WindowMaximized = WindowState == FormWindowState.Maximized;
         if (WindowState == FormWindowState.Normal)
         {
@@ -682,6 +683,7 @@ partial class MainWindow : Form
 
     private void MainForm_LocationChanged(object sender, EventArgs e)
     {
+        if (config == null) return;
         if (WindowState == FormWindowState.Normal)
         {
             config.WindowX = Location.X;
@@ -696,6 +698,11 @@ partial class MainWindow : Form
 
     private void Files_ListViewColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
     {
+        if (config == null || files_ListView.Columns.Count < 2)
+        {
+            return;
+        }
+
         if (!filesListViewColumnWidthChanging)
         {
             filesListViewColumnWidthChanging = true;
@@ -959,11 +966,13 @@ partial class MainWindow : Form
 
     private void Panels_SplitContainerSplitterMoving(object sender, SplitterCancelEventArgs e)
     {
+        if (config == null) return;
         config.SplitterDistance = e.SplitX;
     }
 
     private void Panels_SplitContainerClientSizeChanged(object sender, EventArgs e)
     {
+        if (config == null) return;
         panels_SplitContainer.SplitterDistance = config.SplitterDistance;
     }
 
@@ -1192,6 +1201,18 @@ partial class MainWindow : Form
             var regex = dialog.Pattern;
 
             return (extractLocation, new Regex(regex));
+        });
+    }
+
+    private void RecursivePack_MenuItemClicked(object sender, EventArgs e)
+    {
+        state.RecursivePack(() =>
+        {
+            if (!PickerDialog.ShowOpenFolderDialog("Select Source Folder", out var sourceFolder))
+            {
+                return null;
+            }
+            return sourceFolder;
         });
     }
 

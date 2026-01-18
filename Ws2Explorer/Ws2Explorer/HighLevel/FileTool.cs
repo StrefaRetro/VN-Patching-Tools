@@ -1,4 +1,4 @@
-﻿using System.Security.Cryptography;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using Directory = Ws2Explorer.FileTypes.Directory;
 
@@ -616,6 +616,196 @@ public static class FileTool
             }
         }
         return extracted;
+    }
+
+    /// <summary>
+    /// Recursively packs files from a source folder into an archive.
+    /// This works inversely to <see cref="RecursiveExtract"/>.
+    /// </summary>
+    /// <param name="folder">The archive to pack into.</param>
+    /// <param name="src">The source folder path on disk.</param>
+    /// <param name="overwriteMode">The policy used when writing to a file that already exists.</param>
+    /// <param name="progress"></param>
+    /// <param name="ct"></param>
+    /// <returns>The modified archive.</returns>
+    public static async Task<IFolder> RecursivePack(
+        IFolder folder,
+        string src,
+        OverwriteMode overwriteMode = OverwriteMode.Overwrite,
+        IProgress<TaskProgressInfo>? progress = null,
+        CancellationToken ct = default)
+    {
+        if (folder is IArchive archive)
+        {
+            return await ModifyFolder(archive, async contents =>
+            {
+                var dirInfo = new DirectoryInfo(src);
+                if (!dirInfo.Exists)
+                {
+                    return;
+                }
+
+                foreach (var fsInfo in dirInfo.GetFileSystemInfos())
+                {
+                    if (fsInfo is DirectoryInfo subDir)
+                    {
+                        // Check if corresponding entry in contents exists
+                        if (contents.TryGetValue(fsInfo.Name, out var entryStream))
+                        {
+                            // Try to decode it as a folder
+                            try
+                            {
+                                var subFolderFile = await entryStream.DecodeWithHint(
+                                    fsInfo.Name,
+                                    progress,
+                                    ct,
+                                    decRef: false,
+                                    requiredHintConfidence: DecodeConfidence.Low);
+
+                                try
+                                {
+                                    if (subFolderFile is IFolder subFolder)
+                                    {
+                                        var packedSubFolder = await RecursivePack(
+                                            subFolder,
+                                            subDir.FullName,
+                                            overwriteMode,
+                                            progress,
+                                            ct);
+
+                                        if (packedSubFolder is IFile packedFile)
+                                        {
+                                            if (contents.TryGetValue(fsInfo.Name, out var oldStream))
+                                            {
+                                                oldStream.Dispose();
+                                            }
+                                            contents[fsInfo.Name] = packedFile.Stream;
+                                            packedFile.Stream.IncRef();
+                                            packedFile.Dispose();
+                                        }
+                                    }
+                                }
+                                finally
+                                {
+                                    subFolderFile.Dispose();
+                                }
+                            }
+                            catch (DecodeException)
+                            {
+                                // Failed to decode, skip
+                            }
+                        }
+                    }
+                    else if (fsInfo is System.IO.FileInfo file)
+                    {
+                        // It is a file. Read it and insert/overwrite.
+                        bool exists = contents.TryGetValue(fsInfo.Name, out var oldStream);
+                        if (exists && overwriteMode == OverwriteMode.Skip)
+                        {
+                            continue;
+                        }
+                        if (exists && overwriteMode == OverwriteMode.Throw)
+                        {
+                            throw new IOException($"File '{fsInfo.Name}' already exists.");
+                        }
+
+                        if (exists)
+                        {
+                            oldStream.Dispose();
+                        }
+
+                        var stream = await BinaryStream.CopyFrom(
+                            file.OpenRead(),
+                            fsInfo.Name,
+                            progress,
+                            ct);
+                        contents[fsInfo.Name] = stream;
+                    }
+                }
+            }, progress, ct);
+        }
+        else if (folder is Directory directory)
+        {
+            var dirInfo = new DirectoryInfo(src);
+            if (!dirInfo.Exists)
+            {
+                return folder;
+            }
+
+            foreach (var fsInfo in dirInfo.GetFileSystemInfos())
+            {
+                var destPath = Path.Combine(directory.FullPath, fsInfo.Name);
+                if (fsInfo is DirectoryInfo subDir)
+                {
+                    if (System.IO.Directory.Exists(destPath))
+                    {
+                        await RecursivePack(
+                            new Directory(destPath),
+                            subDir.FullName,
+                            overwriteMode,
+                            progress,
+                            ct);
+                    }
+                    else if (File.Exists(destPath))
+                    {
+                        using var stream = await ReadFile(destPath, progress, ct);
+                        try
+                        {
+                            var subFolderFile = await stream.DecodeWithHint(
+                                fsInfo.Name,
+                                progress,
+                                ct,
+                                decRef: false,
+                                requiredHintConfidence: DecodeConfidence.Low);
+
+                            if (subFolderFile is IFolder subFolder)
+                            {
+                                var packedSubFolder = await RecursivePack(
+                                    subFolder,
+                                    subDir.FullName,
+                                    overwriteMode,
+                                    progress,
+                                    ct);
+
+                                if (packedSubFolder is IFile packedFile)
+                                {
+                                    await WriteFile(destPath, packedFile.Stream, OverwriteMode.Overwrite, progress, ct);
+                                }
+                            }
+                            else
+                            {
+                                subFolderFile.Dispose();
+                            }
+                        }
+                        catch (DecodeException) { }
+                    }
+                    else
+                    {
+                        System.IO.Directory.CreateDirectory(destPath);
+                        await RecursivePack(
+                            new Directory(destPath),
+                            subDir.FullName,
+                            overwriteMode,
+                            progress,
+                            ct);
+                    }
+                }
+                else if (fsInfo is System.IO.FileInfo file)
+                {
+                    if (File.Exists(destPath))
+                    {
+                        if (overwriteMode == OverwriteMode.Skip) continue;
+                        if (overwriteMode == OverwriteMode.Throw) throw new IOException($"File '{fsInfo.Name}' already exists.");
+                    }
+                    file.CopyTo(destPath, true);
+                }
+            }
+            return folder;
+        }
+        else
+        {
+            throw new InvalidOperationException($"Cannot pack into '{folder.GetType().Name}'.");
+        }
     }
 
     /// <summary>

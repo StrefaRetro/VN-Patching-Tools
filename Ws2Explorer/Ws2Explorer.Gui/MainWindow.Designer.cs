@@ -1,4 +1,4 @@
-﻿namespace Ws2Explorer.Gui
+namespace Ws2Explorer.Gui
 {
     partial class MainWindow
     {
@@ -52,6 +52,7 @@
             toolStripSeparator1 = new ToolStripSeparator();
             export_MenuItem = new ToolStripMenuItem();
             recursiveExtract_MenuItem = new ToolStripMenuItem();
+            recursivePack_MenuItem = new ToolStripMenuItem();
             diff_MenuItem = new ToolStripMenuItem();
             toolStripSeparator12 = new ToolStripSeparator();
             createArchive_MenuItem = new ToolStripMenuItem();
@@ -141,9 +142,9 @@
             menu_MenuStrip.SuspendLayout();
             back_Panel.SuspendLayout();
             SuspendLayout();
-            // 
+            //
             // files_ListView
-            // 
+            //
             files_ListView.AllowDrop = true;
             files_ListView.Columns.AddRange(new ColumnHeader[] { name_ColumnHeader, size_ColumnHeader });
             files_ListView.Dock = DockStyle.Fill;
@@ -161,20 +162,20 @@
             files_ListView.DragDrop += Files_ListViewDragDropped;
             files_ListView.DragOver += Files_ListViewDragOver;
             files_ListView.DoubleClick += Files_ListViewDoubleClicked;
-            // 
+            //
             // name_ColumnHeader
-            // 
+            //
             name_ColumnHeader.Text = "Name";
             name_ColumnHeader.Width = 200;
-            // 
+            //
             // size_ColumnHeader
-            // 
+            //
             size_ColumnHeader.Text = "Size";
             size_ColumnHeader.TextAlign = HorizontalAlignment.Right;
             size_ColumnHeader.Width = 80;
-            // 
+            //
             // path_TextBox
-            // 
+            //
             path_TextBox.AllowDrop = true;
             path_TextBox.Dock = DockStyle.Top;
             path_TextBox.Location = new Point(0, 0);
@@ -183,15 +184,15 @@
             path_TextBox.TabIndex = 1;
             path_TextBox.DragDrop += Path_TextBoxDragDropped;
             path_TextBox.DragOver += Path_TextBoxDragOver;
-            // 
+            //
             // panels_SplitContainer
-            // 
+            //
             panels_SplitContainer.Dock = DockStyle.Fill;
             panels_SplitContainer.Location = new Point(0, 0);
             panels_SplitContainer.Name = "panels_SplitContainer";
-            // 
+            //
             // panels_SplitContainer.Panel1
-            // 
+            //
             panels_SplitContainer.Panel1.Controls.Add(files_ListView);
             panels_SplitContainer.Panel1.Controls.Add(midSpacer_Panel);
             panels_SplitContainer.Panel1.Controls.Add(path_TextBox);
@@ -200,54 +201,54 @@
             panels_SplitContainer.TabIndex = 3;
             panels_SplitContainer.SplitterMoving += Panels_SplitContainerSplitterMoving;
             panels_SplitContainer.ClientSizeChanged += Panels_SplitContainerClientSizeChanged;
-            // 
+            //
             // midSpacer_Panel
-            // 
+            //
             midSpacer_Panel.Dock = DockStyle.Top;
             midSpacer_Panel.Location = new Point(0, 23);
             midSpacer_Panel.Name = "midSpacer_Panel";
             midSpacer_Panel.Size = new Size(263, 4);
             midSpacer_Panel.TabIndex = 6;
-            // 
+            //
             // bottomSpacer_Panel
-            // 
+            //
             bottomSpacer_Panel.Dock = DockStyle.Bottom;
             bottomSpacer_Panel.Location = new Point(0, 392);
             bottomSpacer_Panel.Name = "bottomSpacer_Panel";
             bottomSpacer_Panel.Size = new Size(792, 4);
             bottomSpacer_Panel.TabIndex = 7;
-            // 
+            //
             // bottom_StatusStrip
-            // 
+            //
             bottom_StatusStrip.Items.AddRange(new ToolStripItem[] { status_StatusLabel, filler_StatusLabel, task_StatusLabel, progress_ProgressBar, cancel_Button, caption_StatusLabel });
             bottom_StatusStrip.Location = new Point(4, 424);
             bottom_StatusStrip.Name = "bottom_StatusStrip";
             bottom_StatusStrip.Size = new Size(792, 22);
             bottom_StatusStrip.TabIndex = 4;
-            // 
+            //
             // status_StatusLabel
-            // 
+            //
             status_StatusLabel.Name = "status_StatusLabel";
             status_StatusLabel.Size = new Size(0, 17);
-            // 
+            //
             // filler_StatusLabel
-            // 
+            //
             filler_StatusLabel.Name = "filler_StatusLabel";
             filler_StatusLabel.Size = new Size(646, 17);
             filler_StatusLabel.Spring = true;
-            // 
+            //
             // task_StatusLabel
-            // 
+            //
             task_StatusLabel.Name = "task_StatusLabel";
             task_StatusLabel.Size = new Size(0, 17);
-            // 
+            //
             // progress_ProgressBar
-            // 
+            //
             progress_ProgressBar.Name = "progress_ProgressBar";
             progress_ProgressBar.Size = new Size(100, 16);
-            // 
+            //
             // cancel_Button
-            // 
+            //
             cancel_Button.DisplayStyle = ToolStripItemDisplayStyle.Image;
             cancel_Button.Image = (Image)resources.GetObject("cancel_Button.Image");
             cancel_Button.ImageTransparentColor = Color.Magenta;
@@ -255,596 +256,604 @@
             cancel_Button.Size = new Size(29, 20);
             cancel_Button.Text = "toolStripDropDownButton1";
             cancel_Button.Click += Cancel_ButtonClicked;
-            // 
+            //
             // caption_StatusLabel
-            // 
+            //
             caption_StatusLabel.Name = "caption_StatusLabel";
             caption_StatusLabel.Size = new Size(0, 17);
-            // 
+            //
             // menu_MenuStrip
-            // 
+            //
             menu_MenuStrip.BackColor = SystemColors.Control;
             menu_MenuStrip.Items.AddRange(new ToolStripItem[] { file_MenuItem, edit_MenuItem, view_MenuItem, game_MenuItem });
             menu_MenuStrip.Location = new Point(4, 4);
             menu_MenuStrip.Name = "menu_MenuStrip";
             menu_MenuStrip.Size = new Size(792, 24);
             menu_MenuStrip.TabIndex = 5;
-            // 
+            //
             // file_MenuItem
-            // 
-            file_MenuItem.DropDownItems.AddRange(new ToolStripItem[] { newFile_MenuItem, newDirectory_MenuItem, open_MenuItem, openFolder_MenuItem, toolStripSeparator1, export_MenuItem, recursiveExtract_MenuItem, diff_MenuItem, toolStripSeparator12, createArchive_MenuItem, openArchiveAs_MenuItem, toolStripSeparator2, reveal_MenuItem, setEditors_MenuItem, toolStripSeparator3, about_MenuItem, exit_MenuItem });
+            //
+            file_MenuItem.DropDownItems.AddRange(new ToolStripItem[] { newFile_MenuItem, newDirectory_MenuItem, open_MenuItem, openFolder_MenuItem, toolStripSeparator1, export_MenuItem, recursiveExtract_MenuItem, recursivePack_MenuItem, diff_MenuItem, toolStripSeparator12, createArchive_MenuItem, openArchiveAs_MenuItem, toolStripSeparator2, reveal_MenuItem, setEditors_MenuItem, toolStripSeparator3, about_MenuItem, exit_MenuItem });
             file_MenuItem.Name = "file_MenuItem";
             file_MenuItem.Size = new Size(37, 20);
             file_MenuItem.Text = "File";
-            // 
+            //
             // newFile_MenuItem
-            // 
+            //
             newFile_MenuItem.Name = "newFile_MenuItem";
             newFile_MenuItem.ShortcutKeys = Keys.Control | Keys.N;
             newFile_MenuItem.Size = new Size(244, 22);
             newFile_MenuItem.Text = "New...";
             newFile_MenuItem.Click += NewFile_MenuItemClicked;
-            // 
+            //
             // newDirectory_MenuItem
-            // 
+            //
             newDirectory_MenuItem.Name = "newDirectory_MenuItem";
             newDirectory_MenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.N;
             newDirectory_MenuItem.Size = new Size(244, 22);
             newDirectory_MenuItem.Text = "New Directory...";
             newDirectory_MenuItem.Click += NewDirectory_MenuItemClicked;
-            // 
+            //
             // open_MenuItem
-            // 
+            //
             open_MenuItem.Name = "open_MenuItem";
             open_MenuItem.ShortcutKeys = Keys.Control | Keys.O;
             open_MenuItem.Size = new Size(244, 22);
             open_MenuItem.Text = "Open...";
             open_MenuItem.Click += Open_MenuItemClicked;
-            // 
+            //
             // openFolder_MenuItem
-            // 
+            //
             openFolder_MenuItem.Name = "openFolder_MenuItem";
             openFolder_MenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.O;
             openFolder_MenuItem.Size = new Size(244, 22);
             openFolder_MenuItem.Text = "Open Folder...";
             openFolder_MenuItem.Click += OpenFolder_MenuItemClicked;
-            // 
+            //
             // toolStripSeparator1
-            // 
+            //
             toolStripSeparator1.Name = "toolStripSeparator1";
             toolStripSeparator1.Size = new Size(241, 6);
-            // 
+            //
             // export_MenuItem
-            // 
+            //
             export_MenuItem.Name = "export_MenuItem";
             export_MenuItem.ShortcutKeys = Keys.Control | Keys.S;
             export_MenuItem.Size = new Size(244, 22);
             export_MenuItem.Text = "Export...";
             export_MenuItem.Click += Export_MenuItemClicked;
-            // 
+            //
             // recursiveExtract_MenuItem
-            // 
+            //
             recursiveExtract_MenuItem.Name = "recursiveExtract_MenuItem";
             recursiveExtract_MenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.S;
             recursiveExtract_MenuItem.Size = new Size(244, 22);
             recursiveExtract_MenuItem.Text = "Recursive Extract...";
             recursiveExtract_MenuItem.Click += RecursiveExtract_MenuItemClicked;
-            // 
+            //
+            // recursivePack_MenuItem
+            //
+            recursivePack_MenuItem.Name = "recursivePack_MenuItem";
+            recursivePack_MenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.P;
+            recursivePack_MenuItem.Size = new Size(244, 22);
+            recursivePack_MenuItem.Text = "Recursive Pack...";
+            recursivePack_MenuItem.Click += RecursivePack_MenuItemClicked;
+            //
             // diff_MenuItem
-            // 
+            //
             diff_MenuItem.Name = "diff_MenuItem";
             diff_MenuItem.ShortcutKeys = Keys.F3;
             diff_MenuItem.Size = new Size(244, 22);
             diff_MenuItem.Text = "Diff...";
             diff_MenuItem.Click += Diff_MenuItemClicked;
-            // 
+            //
             // toolStripSeparator12
-            // 
+            //
             toolStripSeparator12.Name = "toolStripSeparator12";
             toolStripSeparator12.Size = new Size(241, 6);
-            // 
+            //
             // createArchive_MenuItem
-            // 
+            //
             createArchive_MenuItem.DropDownItems.AddRange(new ToolStripItem[] { createArc_MenuItem, createLegacyArc8_MenuItem, createLegacyArc12_MenuItem, createPna_MenuItem, createWip_MenuItem, createPan_MenuItem, createPtf_MenuItem, createWs2_MenuItem, createWsc_MenuItem, createLng_MenuItem });
             createArchive_MenuItem.Name = "createArchive_MenuItem";
             createArchive_MenuItem.Size = new Size(244, 22);
             createArchive_MenuItem.Text = "Create Archive";
-            // 
+            //
             // createArc_MenuItem
-            // 
+            //
             createArc_MenuItem.Name = "createArc_MenuItem";
             createArc_MenuItem.ShortcutKeys = Keys.Control | Keys.F1;
             createArc_MenuItem.Size = new Size(235, 22);
             createArc_MenuItem.Text = "ARC";
             createArc_MenuItem.Click += CreateArc_MenuItemClicked;
-            // 
+            //
             // createLegacyArc8_MenuItem
-            // 
+            //
             createLegacyArc8_MenuItem.Name = "createLegacyArc8_MenuItem";
             createLegacyArc8_MenuItem.ShortcutKeys = Keys.Control | Keys.F2;
             createLegacyArc8_MenuItem.Size = new Size(235, 22);
             createLegacyArc8_MenuItem.Text = "ARC (Legacy, 8 char)";
             createLegacyArc8_MenuItem.Click += CreateLegacyArc8_MenuItemClicked;
-            // 
+            //
             // createLegacyArc12_MenuItem
-            // 
+            //
             createLegacyArc12_MenuItem.Name = "createLegacyArc12_MenuItem";
             createLegacyArc12_MenuItem.ShortcutKeys = Keys.Control | Keys.F3;
             createLegacyArc12_MenuItem.Size = new Size(235, 22);
             createLegacyArc12_MenuItem.Text = "ARC (Legacy, 12 char)";
             createLegacyArc12_MenuItem.Click += CreateLegacyArc12_MenuItemClicked;
-            // 
+            //
             // createPna_MenuItem
-            // 
+            //
             createPna_MenuItem.Name = "createPna_MenuItem";
             createPna_MenuItem.ShortcutKeys = Keys.Control | Keys.F4;
             createPna_MenuItem.Size = new Size(235, 22);
             createPna_MenuItem.Text = "PNA";
             createPna_MenuItem.Click += CreatePna_MenuItemClicked;
-            // 
+            //
             // createWip_MenuItem
-            // 
+            //
             createWip_MenuItem.Name = "createWip_MenuItem";
             createWip_MenuItem.ShortcutKeys = Keys.Control | Keys.F5;
             createWip_MenuItem.Size = new Size(235, 22);
             createWip_MenuItem.Text = "WIP";
             createWip_MenuItem.Click += CreateWip_MenuItemClicked;
-            // 
+            //
             // createPan_MenuItem
-            // 
+            //
             createPan_MenuItem.Name = "createPan_MenuItem";
             createPan_MenuItem.ShortcutKeys = Keys.Control | Keys.F6;
             createPan_MenuItem.Size = new Size(235, 22);
             createPan_MenuItem.Text = "PAN";
             createPan_MenuItem.Click += CreatePan_MenuItemClicked;
-            // 
+            //
             // createPtf_MenuItem
-            // 
+            //
             createPtf_MenuItem.Name = "createPtf_MenuItem";
             createPtf_MenuItem.ShortcutKeys = Keys.Control | Keys.F7;
             createPtf_MenuItem.Size = new Size(235, 22);
             createPtf_MenuItem.Text = "PTF...";
             createPtf_MenuItem.Click += CreatePtf_MenuItemClicked;
-            // 
+            //
             // createWs2_MenuItem
-            // 
+            //
             createWs2_MenuItem.Name = "createWs2_MenuItem";
             createWs2_MenuItem.ShortcutKeys = Keys.Control | Keys.F8;
             createWs2_MenuItem.Size = new Size(235, 22);
             createWs2_MenuItem.Text = "WS2";
             createWs2_MenuItem.Click += CreateWs2_MenuItemClicked;
-            // 
+            //
             // createWsc_MenuItem
-            // 
+            //
             createWsc_MenuItem.Name = "createWsc_MenuItem";
             createWsc_MenuItem.ShortcutKeys = Keys.Control | Keys.F9;
             createWsc_MenuItem.Size = new Size(235, 22);
             createWsc_MenuItem.Text = "WSC";
             createWsc_MenuItem.Click += CreateWsc_MenuItemClicked;
-            // 
+            //
             // createLng_MenuItem
-            // 
+            //
             createLng_MenuItem.Name = "createLng_MenuItem";
             createLng_MenuItem.ShortcutKeys = Keys.Control | Keys.F10;
             createLng_MenuItem.Size = new Size(235, 22);
             createLng_MenuItem.Text = "LNG...";
             createLng_MenuItem.Click += CreateLng_MenuItemClicked;
-            // 
+            //
             // openArchiveAs_MenuItem
-            // 
+            //
             openArchiveAs_MenuItem.DropDownItems.AddRange(new ToolStripItem[] { openAsArc_MenuItem, openAsLegacyArc8_MenuItem, openAsLegacyArc12_MenuItem, openAsPna_MenuItem, openAsWip_MenuItem, openAsPan_MenuItem, openAsPtf_MenuItem, openAsWs2_MenuItem, openAsWsc_MenuItem, openAsLng_MenuItem });
             openArchiveAs_MenuItem.Name = "openArchiveAs_MenuItem";
             openArchiveAs_MenuItem.Size = new Size(244, 22);
             openArchiveAs_MenuItem.Text = "Open Archive As";
-            // 
+            //
             // openAsArc_MenuItem
-            // 
+            //
             openAsArc_MenuItem.Name = "openAsArc_MenuItem";
             openAsArc_MenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.F1;
             openAsArc_MenuItem.Size = new Size(267, 22);
             openAsArc_MenuItem.Text = "ARC";
             openAsArc_MenuItem.Click += OpenAsArc_MenuItemClicked;
-            // 
+            //
             // openAsLegacyArc8_MenuItem
-            // 
+            //
             openAsLegacyArc8_MenuItem.Name = "openAsLegacyArc8_MenuItem";
             openAsLegacyArc8_MenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.F2;
             openAsLegacyArc8_MenuItem.Size = new Size(267, 22);
             openAsLegacyArc8_MenuItem.Text = "ARC (Legacy, 8 char)";
             openAsLegacyArc8_MenuItem.Click += OpenAsLegacyArc8_MenuItemClicked;
-            // 
+            //
             // openAsLegacyArc12_MenuItem
-            // 
+            //
             openAsLegacyArc12_MenuItem.Name = "openAsLegacyArc12_MenuItem";
             openAsLegacyArc12_MenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.F3;
             openAsLegacyArc12_MenuItem.Size = new Size(267, 22);
             openAsLegacyArc12_MenuItem.Text = "ARC (Legacy, 12 char)";
             openAsLegacyArc12_MenuItem.Click += OpenAsLegacyArc12_MenuItemClicked;
-            // 
+            //
             // openAsPna_MenuItem
-            // 
+            //
             openAsPna_MenuItem.Name = "openAsPna_MenuItem";
             openAsPna_MenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.F4;
             openAsPna_MenuItem.Size = new Size(267, 22);
             openAsPna_MenuItem.Text = "PNA";
             openAsPna_MenuItem.Click += OpenAsPna_MenuItemClicked;
-            // 
+            //
             // openAsWip_MenuItem
-            // 
+            //
             openAsWip_MenuItem.Name = "openAsWip_MenuItem";
             openAsWip_MenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.F5;
             openAsWip_MenuItem.Size = new Size(267, 22);
             openAsWip_MenuItem.Text = "WIP";
             openAsWip_MenuItem.Click += OpenAsWip_MenuItemClicked;
-            // 
+            //
             // openAsPan_MenuItem
-            // 
+            //
             openAsPan_MenuItem.Name = "openAsPan_MenuItem";
             openAsPan_MenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.F6;
             openAsPan_MenuItem.Size = new Size(267, 22);
             openAsPan_MenuItem.Text = "PAN";
             openAsPan_MenuItem.Click += OpenAsPan_MenuItemClicked;
-            // 
+            //
             // openAsPtf_MenuItem
-            // 
+            //
             openAsPtf_MenuItem.Name = "openAsPtf_MenuItem";
             openAsPtf_MenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.F7;
             openAsPtf_MenuItem.Size = new Size(267, 22);
             openAsPtf_MenuItem.Text = "PTF";
             openAsPtf_MenuItem.Click += OpenAsPtf_MenuItemClicked;
-            // 
+            //
             // openAsWs2_MenuItem
-            // 
+            //
             openAsWs2_MenuItem.Name = "openAsWs2_MenuItem";
             openAsWs2_MenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.F8;
             openAsWs2_MenuItem.Size = new Size(267, 22);
             openAsWs2_MenuItem.Text = "WS2";
             openAsWs2_MenuItem.Click += OpenAsWs2_MenuItemClicked;
-            // 
+            //
             // openAsWsc_MenuItem
-            // 
+            //
             openAsWsc_MenuItem.Name = "openAsWsc_MenuItem";
             openAsWsc_MenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.F9;
             openAsWsc_MenuItem.Size = new Size(267, 22);
             openAsWsc_MenuItem.Text = "WSC";
             openAsWsc_MenuItem.Click += OpenAsWsc_MenuItemClicked;
-            // 
+            //
             // openAsLng_MenuItem
-            // 
+            //
             openAsLng_MenuItem.Name = "openAsLng_MenuItem";
             openAsLng_MenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.F10;
             openAsLng_MenuItem.Size = new Size(267, 22);
             openAsLng_MenuItem.Text = "LNG";
             openAsLng_MenuItem.Click += OpenAsLng_MenuItemClicked;
-            // 
+            //
             // toolStripSeparator2
-            // 
+            //
             toolStripSeparator2.Name = "toolStripSeparator2";
             toolStripSeparator2.Size = new Size(241, 6);
-            // 
+            //
             // reveal_MenuItem
-            // 
+            //
             reveal_MenuItem.Name = "reveal_MenuItem";
             reveal_MenuItem.ShortcutKeys = Keys.Control | Keys.R;
             reveal_MenuItem.Size = new Size(244, 22);
             reveal_MenuItem.Text = "Reveal in File Explorer";
             reveal_MenuItem.Click += Reveal_MenuItemClicked;
-            // 
+            //
             // setEditors_MenuItem
-            // 
+            //
             setEditors_MenuItem.Name = "setEditors_MenuItem";
             setEditors_MenuItem.ShortcutKeys = Keys.F4;
             setEditors_MenuItem.Size = new Size(244, 22);
             setEditors_MenuItem.Text = "Set Editors...";
             setEditors_MenuItem.Click += SetEditors_MenuItemClicked;
-            // 
+            //
             // toolStripSeparator3
-            // 
+            //
             toolStripSeparator3.Name = "toolStripSeparator3";
             toolStripSeparator3.Size = new Size(241, 6);
-            // 
+            //
             // about_MenuItem
-            // 
+            //
             about_MenuItem.Name = "about_MenuItem";
             about_MenuItem.ShortcutKeyDisplayString = "Ctrl+Shift+?";
             about_MenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.Oem2;
             about_MenuItem.Size = new Size(244, 22);
             about_MenuItem.Text = "About...";
             about_MenuItem.Click += About_MenuItemClicked;
-            // 
+            //
             // exit_MenuItem
-            // 
+            //
             exit_MenuItem.Name = "exit_MenuItem";
             exit_MenuItem.ShortcutKeys = Keys.Alt | Keys.F4;
             exit_MenuItem.Size = new Size(244, 22);
             exit_MenuItem.Text = "Exit";
             exit_MenuItem.Click += Exit_MenuItemClicked;
-            // 
+            //
             // edit_MenuItem
-            // 
+            //
             edit_MenuItem.DropDownItems.AddRange(new ToolStripItem[] { editInApp_MenuItem, editAs_MenuItem, editScript_MenuItem, toolStripSeparator4, rename_MenuItem, delete_MenuItem, duplicate_MenuItem, toolStripSeparator5, copy_MenuItem, paste_MenuItem, toolStripSeparator6, changePath_MenuItem, toolStripSeparator13, editPnaWip_MenuItem });
             edit_MenuItem.Name = "edit_MenuItem";
             edit_MenuItem.Size = new Size(39, 20);
             edit_MenuItem.Text = "Edit";
-            // 
+            //
             // editInApp_MenuItem
-            // 
+            //
             editInApp_MenuItem.Name = "editInApp_MenuItem";
             editInApp_MenuItem.ShortcutKeys = Keys.Control | Keys.E;
             editInApp_MenuItem.Size = new Size(246, 22);
             editInApp_MenuItem.Text = "Edit in Application...";
             editInApp_MenuItem.Click += EditInApp_MenuItemClicked;
-            // 
+            //
             // editAs_MenuItem
-            // 
+            //
             editAs_MenuItem.DropDownItems.AddRange(new ToolStripItem[] { editAsText_MenuItem, editAsImage_MenuItem, editAsHex_MenuItem });
             editAs_MenuItem.Name = "editAs_MenuItem";
             editAs_MenuItem.Size = new Size(246, 22);
             editAs_MenuItem.Text = "Edit As";
-            // 
+            //
             // editAsText_MenuItem
-            // 
+            //
             editAsText_MenuItem.Name = "editAsText_MenuItem";
             editAsText_MenuItem.ShortcutKeys = Keys.Control | Keys.D1;
             editAsText_MenuItem.Size = new Size(156, 22);
             editAsText_MenuItem.Text = "Text...";
             editAsText_MenuItem.Click += EditAsText_MenuItemClicked;
-            // 
+            //
             // editAsImage_MenuItem
-            // 
+            //
             editAsImage_MenuItem.Name = "editAsImage_MenuItem";
             editAsImage_MenuItem.ShortcutKeys = Keys.Control | Keys.D2;
             editAsImage_MenuItem.Size = new Size(156, 22);
             editAsImage_MenuItem.Text = "Image...";
             editAsImage_MenuItem.Click += EditAsImage_MenuItemClicked;
-            // 
+            //
             // editAsHex_MenuItem
-            // 
+            //
             editAsHex_MenuItem.Name = "editAsHex_MenuItem";
             editAsHex_MenuItem.ShortcutKeys = Keys.Control | Keys.D3;
             editAsHex_MenuItem.Size = new Size(156, 22);
             editAsHex_MenuItem.Text = "Hex...";
             editAsHex_MenuItem.Click += EditAsHex_MenuItemClicked;
-            // 
+            //
             // editScript_MenuItem
-            // 
+            //
             editScript_MenuItem.Name = "editScript_MenuItem";
             editScript_MenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.E;
             editScript_MenuItem.Size = new Size(246, 22);
             editScript_MenuItem.Text = "Edit WS2/WSC Text";
             editScript_MenuItem.Click += EditScriptInApp_MenuItemClicked;
-            // 
+            //
             // toolStripSeparator4
-            // 
+            //
             toolStripSeparator4.Name = "toolStripSeparator4";
             toolStripSeparator4.Size = new Size(243, 6);
-            // 
+            //
             // rename_MenuItem
-            // 
+            //
             rename_MenuItem.Name = "rename_MenuItem";
             rename_MenuItem.ShortcutKeys = Keys.F2;
             rename_MenuItem.Size = new Size(246, 22);
             rename_MenuItem.Text = "Rename...";
             rename_MenuItem.Click += Rename_MenuItemClicked;
-            // 
+            //
             // delete_MenuItem
-            // 
+            //
             delete_MenuItem.Name = "delete_MenuItem";
             delete_MenuItem.ShortcutKeyDisplayString = "Delete";
             delete_MenuItem.Size = new Size(246, 22);
             delete_MenuItem.Text = "Delete";
             delete_MenuItem.Click += Delete_MenuItemClicked;
-            // 
+            //
             // duplicate_MenuItem
-            // 
+            //
             duplicate_MenuItem.Name = "duplicate_MenuItem";
             duplicate_MenuItem.ShortcutKeys = Keys.Control | Keys.D;
             duplicate_MenuItem.Size = new Size(246, 22);
             duplicate_MenuItem.Text = "Duplicate";
             duplicate_MenuItem.Click += Duplicate_MenuItemClicked;
-            // 
+            //
             // toolStripSeparator5
-            // 
+            //
             toolStripSeparator5.Name = "toolStripSeparator5";
             toolStripSeparator5.Size = new Size(243, 6);
-            // 
+            //
             // copy_MenuItem
-            // 
+            //
             copy_MenuItem.Name = "copy_MenuItem";
             copy_MenuItem.ShortcutKeyDisplayString = "Ctrl+C";
             copy_MenuItem.Size = new Size(246, 22);
             copy_MenuItem.Text = "Copy";
             copy_MenuItem.Click += Copy_MenuItemClicked;
-            // 
+            //
             // paste_MenuItem
-            // 
+            //
             paste_MenuItem.Name = "paste_MenuItem";
             paste_MenuItem.ShortcutKeyDisplayString = "Ctrl+V";
             paste_MenuItem.Size = new Size(246, 22);
             paste_MenuItem.Text = "Paste";
             paste_MenuItem.Click += Paste_MenuItemClicked;
-            // 
+            //
             // toolStripSeparator6
-            // 
+            //
             toolStripSeparator6.Name = "toolStripSeparator6";
             toolStripSeparator6.Size = new Size(243, 6);
-            // 
+            //
             // changePath_MenuItem
-            // 
+            //
             changePath_MenuItem.Name = "changePath_MenuItem";
             changePath_MenuItem.ShortcutKeys = Keys.Control | Keys.Q;
             changePath_MenuItem.Size = new Size(246, 22);
             changePath_MenuItem.Text = "Change Path";
             changePath_MenuItem.Click += ChangePath_MenuItemClicked;
-            // 
+            //
             // toolStripSeparator13
-            // 
+            //
             toolStripSeparator13.Name = "toolStripSeparator13";
             toolStripSeparator13.Size = new Size(243, 6);
-            // 
+            //
             // editPnaWip_MenuItem
-            // 
+            //
             editPnaWip_MenuItem.DropDownItems.AddRange(new ToolStripItem[] { pnaAddEntry_MenuItem, swap_MenuItem });
             editPnaWip_MenuItem.Name = "editPnaWip_MenuItem";
             editPnaWip_MenuItem.Size = new Size(246, 22);
             editPnaWip_MenuItem.Text = "PNA/WIP";
-            // 
+            //
             // pnaAddEntry_MenuItem
-            // 
+            //
             pnaAddEntry_MenuItem.Name = "pnaAddEntry_MenuItem";
             pnaAddEntry_MenuItem.ShortcutKeys = Keys.Control | Keys.H;
             pnaAddEntry_MenuItem.Size = new Size(182, 22);
             pnaAddEntry_MenuItem.Text = "Add Entry";
             pnaAddEntry_MenuItem.Click += PnaWipAddEntry_MenuItemClicked;
-            // 
+            //
             // swap_MenuItem
-            // 
+            //
             swap_MenuItem.Name = "swap_MenuItem";
             swap_MenuItem.ShortcutKeys = Keys.Control | Keys.G;
             swap_MenuItem.Size = new Size(182, 22);
             swap_MenuItem.Text = "Swap Entries";
             swap_MenuItem.Click += PnaWipSwap_MenuItemClicked;
-            // 
+            //
             // view_MenuItem
-            // 
+            //
             view_MenuItem.DropDownItems.AddRange(new ToolStripItem[] { refresh_MenuItem, toolStripSeparator7, goToParent_MenuItem, goBack_MenuItem, goForward_MenuItem, toolStripSeparator8, sortBy_MenuItem, wordWrap_MenuItem, toolStripSeparator9, listFiles_MenuItem, viewMetadata_MenuItem, viewPna_MenuItem });
             view_MenuItem.Name = "view_MenuItem";
             view_MenuItem.Size = new Size(44, 20);
             view_MenuItem.Text = "View";
-            // 
+            //
             // refresh_MenuItem
-            // 
+            //
             refresh_MenuItem.Name = "refresh_MenuItem";
             refresh_MenuItem.ShortcutKeys = Keys.F5;
             refresh_MenuItem.Size = new Size(202, 22);
             refresh_MenuItem.Text = "Refresh";
             refresh_MenuItem.Click += Refresh_MenuItemClicked;
-            // 
+            //
             // toolStripSeparator7
-            // 
+            //
             toolStripSeparator7.Name = "toolStripSeparator7";
             toolStripSeparator7.Size = new Size(199, 6);
-            // 
+            //
             // goToParent_MenuItem
-            // 
+            //
             goToParent_MenuItem.Name = "goToParent_MenuItem";
             goToParent_MenuItem.ShortcutKeyDisplayString = "Backspace";
             goToParent_MenuItem.Size = new Size(202, 22);
             goToParent_MenuItem.Text = "Go to Parent";
             goToParent_MenuItem.Click += GoToParent_MenuItemClicked;
-            // 
+            //
             // goBack_MenuItem
-            // 
+            //
             goBack_MenuItem.Name = "goBack_MenuItem";
             goBack_MenuItem.ShortcutKeys = Keys.Alt | Keys.Left;
             goBack_MenuItem.Size = new Size(202, 22);
             goBack_MenuItem.Text = "Go Back";
             goBack_MenuItem.Click += GoBack_MenuItemClicked;
-            // 
+            //
             // goForward_MenuItem
-            // 
+            //
             goForward_MenuItem.Name = "goForward_MenuItem";
             goForward_MenuItem.ShortcutKeys = Keys.Alt | Keys.Right;
             goForward_MenuItem.Size = new Size(202, 22);
             goForward_MenuItem.Text = "Go Forward";
             goForward_MenuItem.Click += GoForward_MenuItemClicked;
-            // 
+            //
             // toolStripSeparator8
-            // 
+            //
             toolStripSeparator8.Name = "toolStripSeparator8";
             toolStripSeparator8.Size = new Size(199, 6);
-            // 
+            //
             // sortBy_MenuItem
-            // 
+            //
             sortBy_MenuItem.DropDownItems.AddRange(new ToolStripItem[] { sortNameAscending_MenuItem, sortNameDescending_MenuItem, sortSizeAscending_MenuItem, sortSizeDescending_MenuItem, sortTypeAscending_MenuItem, sortTypeDescending_MenuItem });
             sortBy_MenuItem.Name = "sortBy_MenuItem";
             sortBy_MenuItem.Size = new Size(202, 22);
             sortBy_MenuItem.Text = "Sort By";
-            // 
+            //
             // sortNameAscending_MenuItem
-            // 
+            //
             sortNameAscending_MenuItem.Checked = true;
             sortNameAscending_MenuItem.CheckState = CheckState.Checked;
             sortNameAscending_MenuItem.Name = "sortNameAscending_MenuItem";
             sortNameAscending_MenuItem.Size = new Size(178, 22);
             sortNameAscending_MenuItem.Text = "Name";
             sortNameAscending_MenuItem.Click += SortNameAscending_MenuItemClicked;
-            // 
+            //
             // sortNameDescending_MenuItem
-            // 
+            //
             sortNameDescending_MenuItem.Name = "sortNameDescending_MenuItem";
             sortNameDescending_MenuItem.Size = new Size(178, 22);
             sortNameDescending_MenuItem.Text = "Name (descending)";
             sortNameDescending_MenuItem.Click += SortNameDescending_MenuItemClicked;
-            // 
+            //
             // sortSizeAscending_MenuItem
-            // 
+            //
             sortSizeAscending_MenuItem.Name = "sortSizeAscending_MenuItem";
             sortSizeAscending_MenuItem.Size = new Size(178, 22);
             sortSizeAscending_MenuItem.Text = "Size";
             sortSizeAscending_MenuItem.Click += SortSizeAscending_MenuItemClicked;
-            // 
+            //
             // sortSizeDescending_MenuItem
-            // 
+            //
             sortSizeDescending_MenuItem.Name = "sortSizeDescending_MenuItem";
             sortSizeDescending_MenuItem.Size = new Size(178, 22);
             sortSizeDescending_MenuItem.Text = "Size (descending)";
             sortSizeDescending_MenuItem.Click += SortSizeDescending_MenuItemClicked;
-            // 
+            //
             // sortTypeAscending_MenuItem
-            // 
+            //
             sortTypeAscending_MenuItem.Name = "sortTypeAscending_MenuItem";
             sortTypeAscending_MenuItem.Size = new Size(178, 22);
             sortTypeAscending_MenuItem.Text = "Type";
             sortTypeAscending_MenuItem.Click += SortTypeAscending_MenuItemClicked;
-            // 
+            //
             // sortTypeDescending_MenuItem
-            // 
+            //
             sortTypeDescending_MenuItem.Name = "sortTypeDescending_MenuItem";
             sortTypeDescending_MenuItem.Size = new Size(178, 22);
             sortTypeDescending_MenuItem.Text = "Type (descending)";
             sortTypeDescending_MenuItem.Click += SortTypeDescending_MenuItemClicked;
-            // 
+            //
             // wordWrap_MenuItem
-            // 
+            //
             wordWrap_MenuItem.CheckOnClick = true;
             wordWrap_MenuItem.Name = "wordWrap_MenuItem";
             wordWrap_MenuItem.ShortcutKeys = Keys.Alt | Keys.Z;
             wordWrap_MenuItem.Size = new Size(202, 22);
             wordWrap_MenuItem.Text = "Word Wrap";
             wordWrap_MenuItem.CheckedChanged += WordWrap_MenuItemCheckChanged;
-            // 
+            //
             // toolStripSeparator9
-            // 
+            //
             toolStripSeparator9.Name = "toolStripSeparator9";
             toolStripSeparator9.Size = new Size(199, 6);
-            // 
+            //
             // listFiles_MenuItem
-            // 
+            //
             listFiles_MenuItem.Name = "listFiles_MenuItem";
             listFiles_MenuItem.ShortcutKeys = Keys.F1;
             listFiles_MenuItem.Size = new Size(202, 22);
             listFiles_MenuItem.Text = "List Files...";
             listFiles_MenuItem.Click += ListFiles_MenuItemClicked;
-            // 
+            //
             // viewMetadata_MenuItem
-            // 
+            //
             viewMetadata_MenuItem.Name = "viewMetadata_MenuItem";
             viewMetadata_MenuItem.ShortcutKeyDisplayString = "Ctrl+?";
             viewMetadata_MenuItem.ShortcutKeys = Keys.Control | Keys.Oem2;
             viewMetadata_MenuItem.Size = new Size(202, 22);
             viewMetadata_MenuItem.Text = "View Metadata...";
             viewMetadata_MenuItem.Click += ViewMetadata_MenuItemClicked;
-            // 
+            //
             // viewPna_MenuItem
-            // 
+            //
             viewPna_MenuItem.DropDownItems.AddRange(new ToolStripItem[] { pnaShowEmpty_MenuItem });
             viewPna_MenuItem.Name = "viewPna_MenuItem";
             viewPna_MenuItem.Size = new Size(202, 22);
             viewPna_MenuItem.Text = "PNA";
-            // 
+            //
             // pnaShowEmpty_MenuItem
-            // 
+            //
             pnaShowEmpty_MenuItem.Checked = true;
             pnaShowEmpty_MenuItem.CheckOnClick = true;
             pnaShowEmpty_MenuItem.CheckState = CheckState.Checked;
@@ -853,90 +862,90 @@
             pnaShowEmpty_MenuItem.Size = new Size(181, 22);
             pnaShowEmpty_MenuItem.Text = "Show Empty";
             pnaShowEmpty_MenuItem.CheckedChanged += PnaShowEmpty_MenuItemCheckChanged;
-            // 
+            //
             // game_MenuItem
-            // 
+            //
             game_MenuItem.DropDownItems.AddRange(new ToolStripItem[] { launchGame_MenuItem, toolStripSeparator11, setEntry_MenuItem, modifyNames_MenuItem, wrapText_MenuItem, convertLuacToText_MenuItem, toolStripSeparator10, findReferences_MenuItem, showChoices_MenuItem, showFlowchart_MenuItem });
             game_MenuItem.Name = "game_MenuItem";
             game_MenuItem.Size = new Size(50, 20);
             game_MenuItem.Text = "Game";
-            // 
+            //
             // launchGame_MenuItem
-            // 
+            //
             launchGame_MenuItem.Name = "launchGame_MenuItem";
             launchGame_MenuItem.ShortcutKeys = Keys.F10;
             launchGame_MenuItem.Size = new Size(240, 22);
             launchGame_MenuItem.Text = "Launch Game (advhd.exe)";
             launchGame_MenuItem.Click += LaunchGame_MenuItemClicked;
-            // 
+            //
             // toolStripSeparator11
-            // 
+            //
             toolStripSeparator11.Name = "toolStripSeparator11";
             toolStripSeparator11.Size = new Size(237, 6);
-            // 
+            //
             // setEntry_MenuItem
-            // 
+            //
             setEntry_MenuItem.Name = "setEntry_MenuItem";
             setEntry_MenuItem.ShortcutKeys = Keys.F11;
             setEntry_MenuItem.Size = new Size(240, 22);
             setEntry_MenuItem.Text = "Set WS2 Entry Point...";
             setEntry_MenuItem.Click += SetEntry_MenuItemClicked;
-            // 
+            //
             // modifyNames_MenuItem
-            // 
+            //
             modifyNames_MenuItem.Name = "modifyNames_MenuItem";
             modifyNames_MenuItem.ShortcutKeys = Keys.F12;
             modifyNames_MenuItem.Size = new Size(240, 22);
             modifyNames_MenuItem.Text = "Edit Names...";
             modifyNames_MenuItem.Click += ModifyNames_MenuItemClicked;
-            // 
+            //
             // wrapText_MenuItem
-            // 
+            //
             wrapText_MenuItem.Name = "wrapText_MenuItem";
             wrapText_MenuItem.ShortcutKeys = Keys.F9;
             wrapText_MenuItem.Size = new Size(240, 22);
             wrapText_MenuItem.Text = "Wrap Text...";
             wrapText_MenuItem.Click += WrapText_ButtonClicked;
-            // 
+            //
             // convertLuacToText_MenuItem
-            // 
+            //
             convertLuacToText_MenuItem.Name = "convertLuacToText_MenuItem";
             convertLuacToText_MenuItem.ShortcutKeys = Keys.F8;
             convertLuacToText_MenuItem.Size = new Size(240, 22);
             convertLuacToText_MenuItem.Text = "Convert Luac to Text...";
             convertLuacToText_MenuItem.Click += ConvertLuacToText_MenuItemClicked;
-            // 
+            //
             // toolStripSeparator10
-            // 
+            //
             toolStripSeparator10.Name = "toolStripSeparator10";
             toolStripSeparator10.Size = new Size(237, 6);
-            // 
+            //
             // findReferences_MenuItem
-            // 
+            //
             findReferences_MenuItem.Name = "findReferences_MenuItem";
             findReferences_MenuItem.ShortcutKeys = Keys.Control | Keys.F;
             findReferences_MenuItem.Size = new Size(240, 22);
             findReferences_MenuItem.Text = "Find String References...";
             findReferences_MenuItem.Click += FindReferences_MenuItemClicked;
-            // 
+            //
             // showChoices_MenuItem
-            // 
+            //
             showChoices_MenuItem.Name = "showChoices_MenuItem";
             showChoices_MenuItem.ShortcutKeys = Keys.F7;
             showChoices_MenuItem.Size = new Size(240, 22);
             showChoices_MenuItem.Text = "Show Choices...";
             showChoices_MenuItem.Click += ShowChoices_MenuItem;
-            // 
+            //
             // showFlowchart_MenuItem
-            // 
+            //
             showFlowchart_MenuItem.Name = "showFlowchart_MenuItem";
             showFlowchart_MenuItem.ShortcutKeys = Keys.F6;
             showFlowchart_MenuItem.Size = new Size(240, 22);
             showFlowchart_MenuItem.Text = "Show Flowchart...";
             showFlowchart_MenuItem.Click += ShowFlowchart_MenuItemClicked;
-            // 
+            //
             // back_Panel
-            // 
+            //
             back_Panel.Controls.Add(panels_SplitContainer);
             back_Panel.Controls.Add(bottomSpacer_Panel);
             back_Panel.Dock = DockStyle.Fill;
@@ -944,9 +953,9 @@
             back_Panel.Name = "back_Panel";
             back_Panel.Size = new Size(792, 396);
             back_Panel.TabIndex = 6;
-            // 
+            //
             // MainWindow
-            // 
+            //
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
@@ -1057,6 +1066,7 @@
         private ToolStripMenuItem changePath_MenuItem;
         private ToolStripSeparator toolStripSeparator13;
         private ToolStripMenuItem recursiveExtract_MenuItem;
+        private ToolStripMenuItem recursivePack_MenuItem;
         private ToolStripMenuItem diff_MenuItem;
         private ToolStripMenuItem newDirectory_MenuItem;
         private ToolStripMenuItem listFiles_MenuItem;

@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Text.Json.Nodes;
@@ -1168,6 +1168,124 @@ class ApplicationState(string? openPath)
         });
     }
 
+    public void RecursivePack(Func<string?> folderPrompt)
+    {
+        Protect(interruptable: false, async ct =>
+        {
+            if (folderStack[^1].Folder is Ws2Directory directory)
+            {
+                var selectedFolders = selectedIndices
+                    .Select(i => fileList[i])
+                    .Where(fi => fi.IsDirectory && fi.Filename != "..")
+                    .ToList();
+
+                if (selectedFolders.Count > 0)
+                {
+                    var dstFolder = folderPrompt();
+                    if (dstFolder == null)
+                    {
+                        return;
+                    }
+
+                    int count = 0;
+                    foreach (var folder in selectedFolders)
+                    {
+                        var ext = Path.GetExtension(folder.Filename);
+                        var type = GetArchiveTypeFromExtension(ext);
+                        if (type != null)
+                        {
+                            var srcPath = Path.Combine(directory.FullPath, folder.Filename);
+                            using var archive = await PackFolderToArchive(new DirectoryInfo(srcPath), type, ct);
+
+                            var dstPath = Path.Combine(dstFolder, folder.Filename);
+                            await using var fs = File.Create(dstPath);
+                            await archive.Stream.CopyTo(fs, folder.Filename, progress, ct);
+                            count++;
+                        }
+                    }
+
+                    OnStatus?.Invoke($"Packed {count} archives.");
+                    return;
+                }
+
+                if (selectedFileNonParent?.File is IFolder selectedArchive)
+                {
+                    var sourceFolder = folderPrompt();
+                    if (sourceFolder == null)
+                    {
+                        return;
+                    }
+
+                    var newArchive = await FileTool.RecursivePack(
+                        selectedArchive,
+                        sourceFolder,
+                        OverwriteMode.Overwrite,
+                        progress,
+                        ct);
+
+                    await directory.WriteFile(
+                        selectedFileNonParent.Info.Filename,
+                        ((IFile)newArchive).Stream,
+                        progress,
+                        ct);
+
+                    await RefreshFolderInternal(ct);
+                    OnStatus?.Invoke("Packed folder into archive.");
+                }
+                else
+                {
+                    throw new QuietError("Select an archive to pack into, or folders to create archives from.");
+                }
+            }
+            else if (folderStack[^1].Folder is IArchive archive)
+            {
+                var sourceFolder = folderPrompt();
+                if (sourceFolder == null)
+                {
+                    return;
+                }
+
+                if (selectedFileNonParent?.File is IFolder selectedSubArchive)
+                {
+                    var newSubArchive = await FileTool.RecursivePack(
+                        selectedSubArchive,
+                        sourceFolder,
+                        OverwriteMode.Overwrite,
+                        progress,
+                        ct);
+
+                    if (newSubArchive is IFile newSubArchiveFile)
+                    {
+                        folderStack[^1] = folderStack[^1] with
+                        {
+                            Folder = await FileTool.Insert(
+                                archive,
+                                new Dictionary<string, BinaryStream> { { selectedFileNonParent.Info.Filename, newSubArchiveFile.Stream } },
+                                OverwriteMode.Overwrite,
+                                progress,
+                                ct)
+                        };
+                    }
+                }
+                else
+                {
+                    var newArchive = await FileTool.RecursivePack(
+                        archive,
+                        sourceFolder,
+                        OverwriteMode.Overwrite,
+                        progress,
+                        ct);
+
+                    folderStack[^1] = folderStack[^1] with { Folder = newArchive };
+                }
+
+                await FileTool.PropagateModifications(folderStack, progress, ct);
+                await RefreshFolderInternal(ct);
+                OnStatus?.Invoke("Packed folder into archive.");
+            }
+        });
+    }
+
     public void DiffFiles(Func<
         IEnumerable<string>,
         (
@@ -1399,6 +1517,67 @@ class ApplicationState(string? openPath)
         }
     }
 
+    private static Type? GetArchiveTypeFromExtension(string extension)
+    {
+        return extension.ToLowerInvariant() switch
+        {
+            ".arc" => typeof(ArcFile),
+            ".ws2" => typeof(Ws2File),
+            ".wsc" => typeof(WscFile),
+            ".pna" => typeof(PnaFile),
+            ".wip" => typeof(WipFile),
+            _ => null,
+        };
+    }
+
+    private async Task<IArchive> PackFolderToArchive(DirectoryInfo dir, Type type, CancellationToken ct)
+    {
+        var method = typeof(ApplicationState)
+            .GetMethod(nameof(PackFolderToArchiveGeneric), System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!
+            .MakeGenericMethod(type);
+        return await (Task<IArchive>)method.Invoke(this, [dir, ct])!;
+    }
+
+    private async Task<IArchive> PackFolderToArchiveGeneric<T>(DirectoryInfo dir, CancellationToken ct)
+        where T : class, IArchive<T>
+    {
+        var contents = new DisposingDictionary<string, BinaryStream>();
+        try
+        {
+            foreach (var fsInfo in dir.GetFileSystemInfos())
+            {
+                if (fsInfo is System.IO.FileInfo file)
+                {
+                    var stream = await BinaryStream.CopyFrom(
+                        file.OpenRead(),
+                        fsInfo.Name,
+                        progress,
+                        ct);
+                    contents[fsInfo.Name] = stream;
+                }
+                else if (fsInfo is DirectoryInfo subDir)
+                {
+                    var ext = Path.GetExtension(subDir.Name);
+                    var subType = GetArchiveTypeFromExtension(ext);
+                    if (subType != null)
+                    {
+                        var subArchive = await PackFolderToArchive(subDir, subType, ct);
+                        var stream = subArchive.Stream;
+                        stream.IncRef();
+                        contents[fsInfo.Name] = stream;
+                        subArchive.Dispose();
+                    }
+                }
+            }
+            return T.Create(contents);
+        }
+        catch
+        {
+            contents.Dispose();
+            throw;
+        }
+    }
+
     private static string GetFileShortDescriptionInternal(IFile file, FileInfo info)
     {
         return file switch
@@ -1573,4 +1752,3 @@ enum EditorType
     Image,
     Hex,
 }
- 
