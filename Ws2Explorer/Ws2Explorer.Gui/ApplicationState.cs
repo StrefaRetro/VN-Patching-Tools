@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Text.Json.Nodes;
@@ -1168,6 +1168,90 @@ class ApplicationState(string? openPath)
         });
     }
 
+    public void RecursivePack(Func<string?> folderPrompt)
+    {
+        Protect(interruptable: false, async ct =>
+        {
+            if (folderStack[^1].Folder is Ws2Directory directory)
+            {
+                if (selectedFileNonParent?.File is IFolder selectedArchive)
+                {
+                    var sourceFolder = folderPrompt();
+                    if (sourceFolder == null)
+                    {
+                        return;
+                    }
+
+                    var newArchive = await FileTool.RecursivePack(
+                        selectedArchive,
+                        sourceFolder,
+                        OverwriteMode.Overwrite,
+                        progress,
+                        ct);
+
+                    await directory.WriteFile(
+                        selectedFileNonParent.Info.Filename,
+                        ((IFile)newArchive).Stream,
+                        progress,
+                        ct);
+
+                    await RefreshFolderInternal(ct);
+                    OnStatus?.Invoke("Packed folder into archive.");
+                }
+                else
+                {
+                    throw new QuietError("Select an archive to pack into.");
+                }
+            }
+            else if (folderStack[^1].Folder is IArchive archive)
+            {
+                var sourceFolder = folderPrompt();
+                if (sourceFolder == null)
+                {
+                    return;
+                }
+
+                if (selectedFileNonParent?.File is IFolder selectedSubArchive)
+                {
+                    var newSubArchive = await FileTool.RecursivePack(
+                        selectedSubArchive,
+                        sourceFolder,
+                        OverwriteMode.Overwrite,
+                        progress,
+                        ct);
+
+                    if (newSubArchive is IFile newSubArchiveFile)
+                    {
+                        folderStack[^1] = folderStack[^1] with
+                        {
+                            Folder = await FileTool.Insert(
+                                archive,
+                                new Dictionary<string, BinaryStream> { { selectedFileNonParent.Info.Filename, newSubArchiveFile.Stream } },
+                                OverwriteMode.Overwrite,
+                                progress,
+                                ct)
+                        };
+                    }
+                }
+                else
+                {
+                    var newArchive = await FileTool.RecursivePack(
+                        archive,
+                        sourceFolder,
+                        OverwriteMode.Overwrite,
+                        progress,
+                        ct);
+
+                    folderStack[^1] = folderStack[^1] with { Folder = newArchive };
+                }
+
+                await FileTool.PropagateModifications(folderStack, progress, ct);
+                await RefreshFolderInternal(ct);
+                OnStatus?.Invoke("Packed folder into archive.");
+            }
+        });
+    }
+
     public void DiffFiles(Func<
         IEnumerable<string>,
         (
@@ -1573,4 +1657,3 @@ enum EditorType
     Image,
     Hex,
 }
- 

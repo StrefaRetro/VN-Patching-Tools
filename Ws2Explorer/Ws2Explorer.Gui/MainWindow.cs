@@ -1,4 +1,4 @@
-﻿using System.Drawing.Text;
+using System.Drawing.Text;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -1192,6 +1192,18 @@ partial class MainWindow : Form
             var regex = dialog.Pattern;
 
             return (extractLocation, new Regex(regex));
+        });
+    }
+
+    private void RecursivePack_MenuItemClicked(object sender, EventArgs e)
+    {
+        state.RecursivePack(() =>
+        {
+            if (!PickerDialog.ShowOpenFolderDialog("Select Source Folder", out var sourceFolder))
+            {
+                return null;
+            }
+            return sourceFolder;
         });
     }
 
