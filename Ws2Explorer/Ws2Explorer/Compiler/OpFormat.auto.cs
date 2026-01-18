@@ -175,7 +175,7 @@ internal sealed class OpFormat
         /* 0x8E */ null,
         /* 0x8F */ null,
         /* 0x90 */ null,
-        /* 0x91 */ null,
+        /* 0x91 */ new OpFormat(null                          , "bfff"                      ),
         /* 0x92 */ null,
         /* 0x93 */ null,
         /* 0x94 */ null,
