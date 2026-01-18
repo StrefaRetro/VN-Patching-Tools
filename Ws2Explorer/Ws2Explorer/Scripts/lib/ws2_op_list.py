@@ -153,7 +153,7 @@ formats = [
     Ws2OpFormat(0x8E, None                 , None                         , None                         , "issbbs"                     , "issbbs"                     ),
     Ws2OpFormat(0x8F, None                 , None                         , None                         , "ss"                         , "ss"                         ),
     Ws2OpFormat(0x90, None                 , None                         , None                         , "s"                          , "s"                          ),
-    Ws2OpFormat(0x91, None                 , None                         , None                         , None                         , None                         ),
+    Ws2OpFormat(0x91, None                 , None                         , "bfff"                       , None                         , None                         ),
     Ws2OpFormat(0x92, None                 , None                         , None                         , None                         , None                         ),
     Ws2OpFormat(0x93, None                 , None                         , None                         , None                         , None                         ),
     Ws2OpFormat(0x94, None                 , None                         , None                         , None                         , None                         ),
