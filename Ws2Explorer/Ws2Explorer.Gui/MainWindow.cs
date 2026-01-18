@@ -672,6 +672,7 @@ partial class MainWindow : Form
 
     private void MainForm_SizeChanged(object sender, EventArgs e)
     {
+        if (config == null) return;
         config.WindowMaximized = WindowState == FormWindowState.Maximized;
         if (WindowState == FormWindowState.Normal)
         {
@@ -682,6 +683,7 @@ partial class MainWindow : Form
 
     private void MainForm_LocationChanged(object sender, EventArgs e)
     {
+        if (config == null) return;
         if (WindowState == FormWindowState.Normal)
         {
             config.WindowX = Location.X;
@@ -964,11 +966,13 @@ partial class MainWindow : Form
 
     private void Panels_SplitContainerSplitterMoving(object sender, SplitterCancelEventArgs e)
     {
+        if (config == null) return;
         config.SplitterDistance = e.SplitX;
     }
 
     private void Panels_SplitContainerClientSizeChanged(object sender, EventArgs e)
     {
+        if (config == null) return;
         panels_SplitContainer.SplitterDistance = config.SplitterDistance;
     }
 
