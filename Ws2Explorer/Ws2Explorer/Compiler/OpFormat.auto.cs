@@ -270,7 +270,7 @@ internal sealed class OpFormat
         /* 0xED */ null,
         /* 0xEE */ null,
         /* 0xEF */ null,
-        /* 0xF0 */ null,
+        /* 0xF0 */ new OpFormat("ScreenUnknown"               , "b"                         ),
         /* 0xF1 */ null,
         /* 0xF2 */ null,
         /* 0xF3 */ null,
