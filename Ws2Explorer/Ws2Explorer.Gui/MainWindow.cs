@@ -696,6 +696,11 @@ partial class MainWindow : Form
 
     private void Files_ListViewColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
     {
+        if (config == null || files_ListView.Columns.Count < 2)
+        {
+            return;
+        }
+
         if (!filesListViewColumnWidthChanging)
         {
             filesListViewColumnWidthChanging = true;
