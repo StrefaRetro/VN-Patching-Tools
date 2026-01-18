@@ -27,8 +27,8 @@ public static class ScriptCompiler
     public static List<Op> DecompileWs2(BinaryStream stream, out ScriptVersion version, out bool hasUnresolvedLabels)
     {
         var versions = new ScriptVersion[] {
-            ScriptVersion.WS2_V3,
             ScriptVersion.WS2_V2,
+            ScriptVersion.WS2_V3,
             ScriptVersion.WS2_V1,
             ScriptVersion.WS2_V3_1, // Rare
         };
@@ -44,8 +44,8 @@ public static class ScriptCompiler
     public static List<Op> DecompileWs2(BinaryStream stream, out ScriptVersion version)
     {
         var versions = new ScriptVersion[] {
-            ScriptVersion.WS2_V3,
             ScriptVersion.WS2_V2,
+            ScriptVersion.WS2_V3,
             ScriptVersion.WS2_V1,
             ScriptVersion.WS2_V3_1, // Rare
         };
