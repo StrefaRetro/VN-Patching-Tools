@@ -90,6 +90,7 @@ namespace Ws2Explorer.Gui
             editAsImage_MenuItem = new ToolStripMenuItem();
             editAsHex_MenuItem = new ToolStripMenuItem();
             editScript_MenuItem = new ToolStripMenuItem();
+            bulkEditScript_MenuItem = new ToolStripMenuItem();
             toolStripSeparator4 = new ToolStripSeparator();
             rename_MenuItem = new ToolStripMenuItem();
             delete_MenuItem = new ToolStripMenuItem();
@@ -571,7 +572,7 @@ namespace Ws2Explorer.Gui
             //
             // edit_MenuItem
             //
-            edit_MenuItem.DropDownItems.AddRange(new ToolStripItem[] { editInApp_MenuItem, editAs_MenuItem, editScript_MenuItem, toolStripSeparator4, rename_MenuItem, delete_MenuItem, duplicate_MenuItem, toolStripSeparator5, copy_MenuItem, paste_MenuItem, toolStripSeparator6, changePath_MenuItem, toolStripSeparator13, editPnaWip_MenuItem });
+            edit_MenuItem.DropDownItems.AddRange(new ToolStripItem[] { editInApp_MenuItem, editAs_MenuItem, editScript_MenuItem, bulkEditScript_MenuItem, toolStripSeparator4, rename_MenuItem, delete_MenuItem, duplicate_MenuItem, toolStripSeparator5, copy_MenuItem, paste_MenuItem, toolStripSeparator6, changePath_MenuItem, toolStripSeparator13, editPnaWip_MenuItem });
             edit_MenuItem.Name = "edit_MenuItem";
             edit_MenuItem.Size = new Size(39, 20);
             edit_MenuItem.Text = "Edit";
@@ -622,6 +623,13 @@ namespace Ws2Explorer.Gui
             editScript_MenuItem.Size = new Size(246, 22);
             editScript_MenuItem.Text = "Edit WS2/WSC Text";
             editScript_MenuItem.Click += EditScriptInApp_MenuItemClicked;
+            //
+            // bulkEditScript_MenuItem
+            //
+            bulkEditScript_MenuItem.Name = "bulkEditScript_MenuItem";
+            bulkEditScript_MenuItem.Size = new Size(246, 22);
+            bulkEditScript_MenuItem.Text = "Bulk Edit WS2/WSC Text";
+            bulkEditScript_MenuItem.Click += BulkEditScript_MenuItemClicked;
             //
             // toolStripSeparator4
             //
@@ -1090,5 +1098,6 @@ namespace Ws2Explorer.Gui
         private ToolStripMenuItem sortTypeAscending_MenuItem;
         private ToolStripMenuItem sortTypeDescending_MenuItem;
         private ToolStripMenuItem wrapText_MenuItem;
+        private ToolStripMenuItem bulkEditScript_MenuItem;
     }
 }

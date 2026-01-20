@@ -613,6 +613,101 @@ class ApplicationState(string? openPath)
         });
     }
 
+    public void BulkEditScriptText(Func<string?> folderPrompt)
+    {
+        Protect(interruptable: false, async ct =>
+        {
+            var translationFolder = folderPrompt();
+            if (translationFolder == null)
+            {
+                return;
+            }
+
+            var directory = folderStack[^1].Folder;
+            var subDirectories = Directory.GetDirectories(translationFolder);
+            int count = 0;
+            int processed = 0;
+
+            foreach (var subDir in subDirectories)
+            {
+                var scriptName = Path.GetFileName(subDir);
+                var textJsonPath = Path.Combine(subDir, "text.json");
+
+                if (!File.Exists(textJsonPath))
+                {
+                    continue;
+                }
+
+                // Check if script exists in current folder
+                if (!directory.ListFiles().Any(f => f.Filename.Equals(scriptName, StringComparison.InvariantCultureIgnoreCase)))
+                {
+                    continue;
+                }
+
+                try
+                {
+                    // Read original script
+                    using var scriptStream = await directory.OpenFile(scriptName, progress, ct);
+
+                    IFile decodedFile;
+                    try
+                    {
+                        decodedFile = await scriptStream.DecodeWithHint(scriptName, progress, ct, decRef: false);
+                    }
+                    catch
+                    {
+                        continue;
+                    }
+
+                    if (decodedFile is not ScriptFile script)
+                    {
+                        decodedFile.Dispose();
+                        continue;
+                    }
+
+                    using (script)
+                    {
+                        using var newTextStream = await FileTool.ReadFile(textJsonPath, progress, ct);
+
+                        var newScript = await FileTool.Insert(
+                            script,
+                            new Dictionary<string, BinaryStream> {
+                                { ScriptFile.NEW_TEXT_FILENAME, newTextStream },
+                            },
+                            OverwriteMode.Overwrite,
+                            progress,
+                            ct);
+
+                        try
+                        {
+                            await FileTool.Insert(
+                                folderStack,
+                                new Dictionary<string, BinaryStream> {
+                                    { scriptName, newScript.Stream },
+                                },
+                                OverwriteMode.Overwrite,
+                                progress,
+                                ct);
+                            count++;
+                        }
+                        finally
+                        {
+                            newScript.Dispose();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    OnStatus?.Invoke($"Failed to update {scriptName}: {ex.Message}");
+                }
+                processed++;
+            }
+
+            await RefreshFolderInternal(ct);
+            OnStatus?.Invoke($"Bulk edit complete. Updated {count} files.");
+        });
+    }
+
     public void EditScriptTextInApp(string editor, string editorArgs)
     {
         Protect(interruptable: false, async ct =>

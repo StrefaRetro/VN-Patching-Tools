@@ -518,6 +518,18 @@ partial class MainWindow : Form
         state.EditScriptTextInApp(config.TextEditorPath, config.TextEditorArgs);
     }
 
+    private void BulkEditScript_MenuItemClicked(object sender, EventArgs e)
+    {
+        state.BulkEditScriptText(() =>
+        {
+            if (PickerDialog.ShowOpenFolderDialog("Select Translation Folder", out var translationFolder))
+            {
+                return translationFolder;
+            }
+            return null;
+        });
+    }
+
     private void EditAsText_MenuItemClicked(object sender, EventArgs e)
     {
         state.EditSelectedFileInApp(_ =>
