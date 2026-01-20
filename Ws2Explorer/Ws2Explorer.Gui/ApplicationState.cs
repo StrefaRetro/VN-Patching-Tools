@@ -624,7 +624,7 @@ class ApplicationState(string? openPath)
             }
 
             var directory = folderStack[^1].Folder;
-            var subDirectories = Directory.GetDirectories(translationFolder);
+            var subDirectories = System.IO.Directory.GetDirectories(translationFolder);
             int count = 0;
             int processed = 0;
 
@@ -633,7 +633,7 @@ class ApplicationState(string? openPath)
                 var scriptName = Path.GetFileName(subDir);
                 var textJsonPath = Path.Combine(subDir, "text.json");
 
-                if (!File.Exists(textJsonPath))
+                if (!System.IO.File.Exists(textJsonPath))
                 {
                     continue;
                 }
