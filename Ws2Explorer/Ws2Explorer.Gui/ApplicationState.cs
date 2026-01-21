@@ -667,7 +667,8 @@ class ApplicationState(string? openPath)
 
                     using (script)
                     {
-                        using var newTextStream = await FileTool.ReadFile(textJsonPath, progress, ct);
+                        var jsonText = await System.IO.File.ReadAllTextAsync(textJsonPath, ct);
+                        using var newTextStream = new BinaryStream(jsonText);
 
                         var newScript = await FileTool.Insert(
                             script,
