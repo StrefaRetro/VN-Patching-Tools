@@ -195,7 +195,12 @@ public class BinaryWriter
     /// <param name="v"></param>
     public void WriteSjisString(string v)
     {
-        WriteBytes(SjisEncoding.Encoding.GetBytes(v));
+        if (SjisEncoding.OutputEncoding.CodePage == 1200) // UTF-16 LE
+        {
+            WriteUTF16String(v);
+            return;
+        }
+        WriteBytes(SjisEncoding.OutputEncoding.GetBytes(v));
         WriteUInt8(0);
     }
 

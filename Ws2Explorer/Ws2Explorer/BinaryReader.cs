@@ -204,6 +204,10 @@ public class BinaryReader
     /// <returns></returns>
     public string ReadSjisString()
     {
+        // Encoding here is 1250 (input), so this path is normal for original files.
+        // We removed the UTF-16 check because SjisEncoding.Encoding is now 1250.
+        // If we ever supported reading UTF-16 inputs, we'd check that property here.
+
         var bytes = new List<byte>(16);
         while (true)
         {
