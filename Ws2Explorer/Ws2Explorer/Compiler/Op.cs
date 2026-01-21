@@ -468,12 +468,12 @@ public readonly struct Argument
         ushort => 2,
         uint => 4,
         float => 4,
-        string => 1 + SjisEncoding.Encoding.GetByteCount(String),
-        AffixedString v => 1 + SjisEncoding.Encoding.GetByteCount(v.FullString),
+        string => (SjisEncoding.OutputEncoding.CodePage == 1200 ? 2 : 1) + SjisEncoding.OutputEncoding.GetByteCount(String),
+        AffixedString v => (SjisEncoding.OutputEncoding.CodePage == 1200 ? 2 : 1) + SjisEncoding.OutputEncoding.GetByteCount(v.FullString),
         ImmutableArray<ushort> v => 1 + (v.Length * 2),
-        ImmutableArray<string> v => 1 + v.Sum(s => 1 + SjisEncoding.Encoding.GetByteCount(s)),
-        ImmutableArray<Ws2Choice> v => 1 + v.Sum(c => 6 + SjisEncoding.Encoding.GetByteCount(c.Text) + c.JumpOp.Size),
-        ImmutableArray<WscChoice> v => 2 + v.Sum(c => 6 + SjisEncoding.Encoding.GetByteCount(c.Text) + c.JumpOp.Size),
+        ImmutableArray<string> v => 1 + v.Sum(s => (SjisEncoding.OutputEncoding.CodePage == 1200 ? 2 : 1) + SjisEncoding.OutputEncoding.GetByteCount(s)),
+        ImmutableArray<Ws2Choice> v => 1 + v.Sum(c => 6 + SjisEncoding.OutputEncoding.GetByteCount(c.Text) + (SjisEncoding.OutputEncoding.CodePage == 1200 ? 1 : 0) + c.JumpOp.Size),
+        ImmutableArray<WscChoice> v => 2 + v.Sum(c => 6 + SjisEncoding.OutputEncoding.GetByteCount(c.Text) + (SjisEncoding.OutputEncoding.CodePage == 1200 ? 1 : 0) + c.JumpOp.Size),
         _ => throw new UnreachableException(),
     };
 
